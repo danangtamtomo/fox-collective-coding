@@ -70,10 +70,6 @@ let checkAnswer = (req, res, next) => {
 
   let answerincubator = require('../answerincubator')
   res.send(answerincubator()('Danang Aji Tamtomo'))
-  // Challenge.findById(req.params.id)
-  //   .then((challenge) => {
-  //
-  //   })
 }
 
 module.exports = {
