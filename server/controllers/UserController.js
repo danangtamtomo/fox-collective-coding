@@ -79,9 +79,11 @@ let checkOnline = (req, res, next) => {
     status: true
   })
     .then((users) => {
+      res.send(users)
     })
 }
 
 module.exports = {
   login,
+  checkOnline,
 verifyToken}
