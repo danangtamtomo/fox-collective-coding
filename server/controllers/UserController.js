@@ -12,11 +12,11 @@ let login = (req, res, next) => {
     if (!data) {
       // kalau user sudah ada didatabase
       data.create({
-          username: payload.name,
-          email: payload.email,
-          facebook_id: payload.id,
-          status: true
-        })
+        username: payload.name,
+        email: payload.email,
+        facebook_id: payload.id,
+        status: true
+      })
         .then((user) => {
           let token = jwt.sign({
             username: payload.name
