@@ -11,7 +11,8 @@ let userSchema = new Schema({
     require: true
   },
   email: String,
-  facebook_id: Number
+  facebook_id: Number,
+  status: Boolean
 }, {
   timestamps: true
 })
