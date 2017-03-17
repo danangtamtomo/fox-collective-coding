@@ -1,6 +1,8 @@
 'use strict'
 
 const Challenge = require('../models/Challenge')
+var fs = require('fs')
+// var AnswerIncubator = require('../answerincubator')
 
 let getChallenges = (req, res, next) => {
   Challenge.find({}).then((data) => {
@@ -57,8 +59,29 @@ let updateChallenge = (req, res, next) => {
   })
 }
 
+let checkAnswer = (req, res, next) => {
+  let answer = `
+  function answer () {
+    return ${req.body.answer}
+  }
+  module.exports = answer
+  `
+  fs.writeFileSync('answerincubator.js', answer)
+
+  let answerincubator = require('../answerincubator')
+
+  Challenge.findById(req.params.id)
+    .then(function (challenge) {
+      res.send({
+        status: challenge.output === answerincubator()(challenge.input),
+        result: answerincubator()(challenge.input)
+      })
+    })
+}
+
 module.exports = {
   getChallenges,
   createChallenge,
-  updateChallenge
+  updateChallenge,
+  checkAnswer
 }
