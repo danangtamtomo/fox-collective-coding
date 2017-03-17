@@ -1,12 +1,12 @@
-##Project Title
+## Project Title
 
-####FOX COLLECTIVE CODING
+#### FOX COLLECTIVE CODING
 
-##Descriptions
+## Descriptions
 
 Fox Collective Coding is web base coding test for hactive8 student
 
-##Getting Started
+## Getting Started
 
 The app using technology below :
 - Express js
@@ -19,23 +19,23 @@ The app using technology below :
 - Bootstrap
 - Jsonwebtoken
 
-##How to use
+## How to use
 
 ```
 > npm install
 > npm run dev
 ```
 
-##List of Route
+## List of Route
 
-####Authenticate Route
+#### Authenticate Route
 
 | Route                   | HTTP | DESC     |
 | ----------------------- | ---- | -------- |
 | /login                  | POST | Login    |
 
 
-####Api User Route
+#### Api User Route
 
 | Route                              | HTTP   | Description                             |
 | ---------------------------------- | ------ | --------------------------------------- |
@@ -45,7 +45,7 @@ The app using technology below :
 | api/user                           | PUT    | Update User                             |
 | api/user                           | DELETE | Delete User                             |
 
-####Api Challenge Route
+#### Api Challenge Route
 
 | Route                              | HTTP   | Description                             |
 | ---------------------------------- | ------ | --------------------------------------- |
@@ -55,7 +55,7 @@ The app using technology below :
 | api/challenge                      | PUT    | Update Challenge                        |
 | api/challenge                      | DELETE | Update Challenge                        |
 
-####Authors
+#### Authors
 |Name           |Github                          |
 |:--------------|:------------------------------:|
 |Danang         |https://github.com/danangtamtomo|
