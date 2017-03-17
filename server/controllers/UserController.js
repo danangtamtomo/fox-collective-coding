@@ -11,8 +11,8 @@ let login = (req, res, next) => {
     email: payload.email
   }).then((data) => {
     if (!data) {
-      // kalau user sudah ada didatabase
-      data.create({
+      // kalau user tidak ada
+      User.create({
           username: payload.name,
           email: payload.email,
           facebook_id: payload.id,
@@ -26,7 +26,7 @@ let login = (req, res, next) => {
           challengeManager.notifyWhoIsLoggedIn(user)
 
           res.send({
-            user: user,
+            user: payload.email,
             token: token
           })
         })
@@ -37,15 +37,20 @@ let login = (req, res, next) => {
           })
         })
     } else {
-      // kalau user tidak ada
+      // kalau user sudah ada didatabase
       let token = jwt.sign({
         username: payload.name
       }, secret, {})
 
-      challengeManager.notifyWhoIsLoggedIn(user)
+      data.status = true
+      data.save()
+        .then(() => {
+          challengeManager.notifyWhoIsLoggedIn(data)
+        })
 
       res.send({
         message: 'use sudah ada, jadi hanya token yang dibuat',
+        user: payload.email,
         token: token
       })
     }
@@ -79,12 +84,7 @@ let verifyToken = (req, res, next) => {
   })
 }
 
-let logout = (req, res, next) => {
-
-}
-
 module.exports = {
   login,
-  logout,
   verifyToken
 }
