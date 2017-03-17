@@ -1,7 +1,10 @@
 'use strict'
 
 const Challenge = require('../models/Challenge')
-var fs = require('fs')
+const cron = require('node-cron')
+const moment = require('moment')
+const fs = require('fs')
+const challengeManager = require('../helpers/challengeManager')
 // var AnswerIncubator = require('../answerincubator')
 
 let getChallenges = (req, res, next) => {
@@ -25,6 +28,7 @@ let getChallenges = (req, res, next) => {
 
 let createChallenge = (req, res, next) => {
   Challenge.create(req.body).then((data) => {
+    getPlaying()
     res.send({
       message: 'Data has been save!',
       challenge: data
@@ -71,10 +75,28 @@ let checkAnswer = (req, res, next) => {
   let answerincubator = require('../answerincubator')
 
   Challenge.findById(req.params.id)
-    .then(function (challenge) {
+    .then(function(challenge) {
       res.send({
         status: challenge.output === answerincubator()(challenge.input),
         result: answerincubator()(challenge.input)
+      })
+    })
+}
+
+let getPlaying = () => {
+  User.find({
+      status: true
+    })
+    .sort('updatedAt')
+    .then((users) => {
+      users.forEach((user, index) => {
+        user.turn_order = index + 1
+        user.save()
+          .then(() => {
+            cron.schedule(`* ${moment().add(2*(index+1), 'm').format('m')} * * *`, function() {
+              challengeManager.notifyTurn()
+            })
+          })
       })
     })
 }

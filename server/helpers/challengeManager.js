@@ -32,9 +32,10 @@ challengeManager.writeLoginUser = function (user) {
   })
 }
 
-challengeManager.notifyWhoIsLoggedIn({
-  _id: 'danang',
-  name: 'Danang Aji Tamtomo'
-})
+challengeManager.notifyTurn = function (user) {
+  firebase.database().ref('turn').set({
+    turn: user
+  })
+}
 
 module.exports = challengeManager

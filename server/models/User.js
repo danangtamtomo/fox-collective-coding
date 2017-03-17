@@ -12,7 +12,8 @@ let userSchema = new Schema({
   },
   email: String,
   facebook_id: Number,
-  status: Boolean
+  status: Boolean,
+  turn_order: Number
 }, {
   timestamps: true
 })

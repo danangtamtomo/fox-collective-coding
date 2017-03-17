@@ -12,6 +12,8 @@ router.post('/user', userControllers.login)
 // router.delete('/user/:id', userControllers.deleteUser)
 router.get('/user/verify/:token', userControllers.verifyToken)
 
+router.get('/user/checkonline', userControllers.checkOnline)
+
 // routing challenge
 router.get('/challenge', challengeControllers.getChallenges)
 // router.get('/challenge/:id', challengeControllers.getChallenge)
