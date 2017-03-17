@@ -102,10 +102,10 @@ let getPlaying = () => {
       users.forEach((user, index) => {
         user.turn_order = index + 1
         user.save()
-          .then(() => {
-            console.log(`${moment().add(2 * (index + 1), 'm').format('m')} * * * *`)
-            cron.schedule(`${moment().add(2 * (index + 1), 'm').format('m')} * * * *`, function() {
-              challengeManager.notifyTurn(user)
+          .then((user) => {
+            console.log(`${moment().add(1 * (index + 1), 'm').format('m')} * * * *`)
+            cron.schedule(`${moment().add(1 * (index + 1), 'm').format('m')} * * * *`, function() {
+              challengeManager.notifyTurn(user.username)
             })
           })
       })
