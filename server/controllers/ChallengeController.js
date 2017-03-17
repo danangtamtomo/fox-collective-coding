@@ -103,8 +103,9 @@ let getPlaying = () => {
         user.turn_order = index + 1
         user.save()
           .then(() => {
-            cron.schedule(`* ${moment().add(2 * (index + 1), 'm').format('m')} * * *`, function() {
-              challengeManager.notifyTurn()
+            console.log(`${moment().add(2 * (index + 1), 'm').format('m')} * * * *`)
+            cron.schedule(`${moment().add(2 * (index + 1), 'm').format('m')} * * * *`, function() {
+              challengeManager.notifyTurn(user)
             })
           })
       })
