@@ -116,5 +116,4 @@ module.exports = {
   getChallenges,
   createChallenge,
   updateChallenge,
-  checkAnswer,
-getPlayer}
+checkAnswer}
