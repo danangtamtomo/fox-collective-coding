@@ -5,8 +5,8 @@ const router = express.Router()
 const controller = require('../controllers/ChallengeController')
 
 /* GET home page. */
-router.get('/challenges', controller.getChallenges)
-router.post('challenge', controller.createChallenge)
-router.put('challenge/:id', controller.updateChallenge)
+router.get('/', function (req, res, next) {
+  res.send('using /api')
+})
 
 module.exports = router
