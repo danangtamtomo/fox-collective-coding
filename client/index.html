@@ -87,6 +87,15 @@
         }
         offlineDir.set(null)
       });
+
+      //listener buat klo ada user offline
+      var turn = firebase.database().ref('turn/');
+      turn.on('value', function(notif) {
+        if (notif.val() !== null) {
+          console.log(notif.val().giliran);
+        }
+        turn.set(null)
+      });
     </script>
     <!-- <script src="src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script>
