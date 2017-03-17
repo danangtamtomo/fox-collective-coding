@@ -3,7 +3,7 @@ var router = express.Router()
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.send('using /api')
+  res.send({message: 'It is index'})
 })
 
 module.exports = router
