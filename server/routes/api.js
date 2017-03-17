@@ -6,13 +6,13 @@ var challengeControllers = require('../controllers/ChallengeController.js')
 // routing user
 // router.get('/user', userControllers.getUsers)
 // router.get('/user/:id', userControllers.getUser)
-router.post('/user', userControllers.login)
-// router.post('/user', userControllers.logout)
+router.post('/user/login', userControllers.login)
+router.post('/user/logout', userControllers.logout)
 // router.put('/user/:id', userControllers.updateUser)
 // router.delete('/user/:id', userControllers.deleteUser)
 router.get('/user/verify/:token', userControllers.verifyToken)
 
-router.get('/user/checkonline', userControllers.checkOnline)
+router.get('/user/checkonline', challengeControllers.checkOnline)
 
 // routing challenge
 router.get('/challenge', challengeControllers.getChallenges)

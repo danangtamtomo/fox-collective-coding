@@ -1,14 +1,14 @@
 <template>
-  <div class="background">
-    <div class="login text-vertical-center">
-      <fb-signin-button :params="fbSignInParams" @success="onSignInSuccess" @error="onSignInError">Sign in with Facebook</fb-signin-button>
-    </div>
+<div class="background">
+  <div class="login text-vertical-center">
+    <fb-signin-button :params="fbSignInParams" @success="onSignInSuccess" @error="onSignInError">Sign in with Facebook</fb-signin-button>
   </div>
+</div>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       fbSignInParams: {
         scope: 'email,public_profile',
@@ -17,23 +17,27 @@ export default {
     }
   },
   methods: {
-    onSignInSuccess (response) {
-      FB.api('/me', {fields: 'name, gender, email'}, dude => {
-        axios.post('api/user', {
+    onSignInSuccess(response) {
+      FB.api('/me', {
+        fields: 'name, gender, email'
+      }, dude => {
+        axios.post('http://localhost:3000/api/user/login', {
             name: dude.name,
             email: dude.email,
             id: dude.id
           })
-          .then(function (response) {
+          .then(function(response) {
+            console.log(response.data);
             localStorage.setItem('token', response.data.token)
-            window.location.href = 'http://localhost:8080/home'
+            localStorage.setItem('email', response.data.user)
+            window.location.href = 'http://localhost:8080/'
           })
-          .catch(function (error) {
+          .catch(function(error) {
             console.log(error);
           });
       })
     },
-    onSignInError (error) {
+    onSignInError(error) {
       console.log('OH NOES', error)
 
     }
@@ -43,31 +47,29 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
-
 .text-vertical-center {
-    display: table-cell;
-    text-align: center;
-    vertical-align: middle;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .text-vertical-center h1 {
-    margin: 0;
-    padding: 0;
-    font-size: 4.5em;
-    font-weight: 700;
+  margin: 0;
+  padding: 0;
+  font-size: 4.5em;
+  font-weight: 700;
 }
 
 .background {
-    display: table;
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background: url(../assets/code.jpg) no-repeat center center scroll;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    background-size: cover;
-    -o-background-size: cover;
+  display: table;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: url(../assets/code.jpg) no-repeat center center scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
 }
 
 .fb-signin-button {

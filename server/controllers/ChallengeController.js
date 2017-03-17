@@ -5,6 +5,7 @@ const cron = require('node-cron')
 const moment = require('moment')
 const fs = require('fs')
 const challengeManager = require('../helpers/challengeManager')
+const User = require('../models/User')
 // var AnswerIncubator = require('../answerincubator')
 
 let getChallenges = (req, res, next) => {
@@ -75,7 +76,7 @@ let checkAnswer = (req, res, next) => {
   let answerincubator = require('../answerincubator')
 
   Challenge.findById(req.params.id)
-    .then(function (challenge) {
+    .then(function(challenge) {
       res.send({
         status: challenge.output === answerincubator()(challenge.input),
         result: answerincubator()(challenge.input)
@@ -85,9 +86,8 @@ let checkAnswer = (req, res, next) => {
 
 let checkOnline = (req, res, next) => {
   User.find({
-    status: true
-  })
-    .sort('updatedAt')
+      status: true
+    })
     .then((users) => {
       res.send(users)
     })
@@ -95,17 +95,17 @@ let checkOnline = (req, res, next) => {
 
 let getPlaying = () => {
   User.find({
-    status: true
-  })
+      status: true
+    })
     .sort('updatedAt')
     .then((users) => {
       users.forEach((user, index) => {
         user.turn_order = index + 1
         user.save()
-          .then(() => {
-            console.log(moment().add(2, 'm').format('m'))
-            cron.schedule(`* ${moment().add(2*(index+1), 'm').format('m')} * * *`, function () {
-              challengeManager.notifyTurn()
+          .then((user) => {
+            console.log(`${moment().add(1 * (index + 1), 'm').format('m')} * * * *`)
+            cron.schedule(`${moment().add(1 * (index + 1), 'm').format('m')} * * * *`, function() {
+              challengeManager.notifyTurn(user.username)
             })
           })
       })
@@ -116,4 +116,6 @@ module.exports = {
   getChallenges,
   createChallenge,
   updateChallenge,
-checkAnswer}
+  checkAnswer,
+  checkOnline
+}

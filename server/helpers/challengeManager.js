@@ -12,29 +12,29 @@ var config = {
 }
 firebase.initializeApp(config)
 
-challengeManager.notifyWhoIsLoggedIn = function (user) {
+challengeManager.notifyWhoIsLoggedIn = function(user) {
   this.writeLoginUser(user)
 }
 
-challengeManager.notifyWhoIsLoggedOff = function (user) {
+challengeManager.notifyWhoIsLoggedOff = function(user) {
   this.removeLoginUser(user)
 }
 
-challengeManager.removeLoginUser = function (user) {
+challengeManager.removeLoginUser = function(user) {
   firebase.database().ref('newoffline/').set({
     newonline: user._id
   })
 }
 
-challengeManager.writeLoginUser = function (user) {
+challengeManager.writeLoginUser = function(user) {
   firebase.database().ref('newonline/').set({
     newonline: user._id
   })
 }
 
-challengeManager.notifyTurn = function (user) {
+challengeManager.notifyTurn = function(user) {
   firebase.database().ref('turn').set({
-    turn: user
+    giliran: user
   })
 }
 
