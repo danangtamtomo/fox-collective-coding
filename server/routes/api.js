@@ -11,7 +11,7 @@ var challengeControllers = require('../controllers/ChallengeController.js')
 // router.delete('/user/:id', userControllers.deleteUser)
 
 // routing challenge
-router.get('/challenge', challengeControllers.getChallenges)
+router.get('/challenges', challengeControllers.getChallenges)
 // router.get('/challenge/:id', challengeControllers.getChallenge)
 router.post('/challenge', challengeControllers.createChallenge)
 router.put('/challenge/:id', challengeControllers.updateChallenge)
