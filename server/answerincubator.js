@@ -1,5 +1,6 @@
 
   function answer () {
-    return function FirstReverse(str) { return str.split('').reverse().join(''); }
+    return function NumberInWords(angka) { return 'dua puluh ribu' }
   }
   module.exports = answer
+  

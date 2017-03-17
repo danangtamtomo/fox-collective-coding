@@ -69,7 +69,14 @@ let checkAnswer = (req, res, next) => {
   fs.writeFileSync('answerincubator.js', answer)
 
   let answerincubator = require('../answerincubator')
-  res.send(answerincubator()('Danang Aji Tamtomo'))
+
+  Challenge.findById(req.params.id)
+    .then(function (challenge) {
+      res.send({
+        status: challenge.output === answerincubator()(challenge.input),
+        result: answerincubator()(challenge.input)
+      })
+    })
 }
 
 module.exports = {
