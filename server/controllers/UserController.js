@@ -3,24 +3,27 @@
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
 const secret = 'lalalalala'
+var challengeManager = require('../helpers/challengeManager')
 
 let login = (req, res, next) => {
   let payload = req.body
-  User.findOneOrCreate({
+  User.findOne({
     email: payload.email
   }).then((data) => {
     if (!data) {
       // kalau user sudah ada didatabase
       data.create({
-        username: payload.name,
-        email: payload.email,
-        facebook_id: payload.id,
-        status: true
-      })
+          username: payload.name,
+          email: payload.email,
+          facebook_id: payload.id,
+          status: true
+        })
         .then((user) => {
           let token = jwt.sign({
             username: payload.name
           }, secret, {})
+
+          challengeManager.notifyWhoIsLoggedIn(user)
 
           res.send({
             user: user,
@@ -38,6 +41,8 @@ let login = (req, res, next) => {
       let token = jwt.sign({
         username: payload.name
       }, secret, {})
+
+      challengeManager.notifyWhoIsLoggedIn(user)
 
       res.send({
         message: 'use sudah ada, jadi hanya token yang dibuat',
@@ -74,7 +79,12 @@ let verifyToken = (req, res, next) => {
   })
 }
 
+let logout = (req, res, next) => {
+
+}
+
 module.exports = {
   login,
+  logout,
   verifyToken
 }
