@@ -1,14 +1,15 @@
 var express = require('express')
 var router = express.Router()
-// var userControllers = require('../controllers/UserController.js')
+var userControllers = require('../controllers/UserController.js')
 var challengeControllers = require('../controllers/ChallengeController.js')
 /* GET users listing. */
 // routing user
 // router.get('/user', userControllers.getUsers)
 // router.get('/user/:id', userControllers.getUser)
-// router.post('/user', userControllers.createUser)
+router.post('/user', userControllers.login)
 // router.put('/user/:id', userControllers.updateUser)
 // router.delete('/user/:id', userControllers.deleteUser)
+router.get('/user/verify/:token', userControllers.verifyToken)
 
 // routing challenge
 router.get('/challenge', challengeControllers.getChallenges)
