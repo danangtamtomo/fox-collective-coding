@@ -83,6 +83,16 @@ let checkAnswer = (req, res, next) => {
     })
 }
 
+let checkOnline = (req, res, next) => {
+  User.find({
+    status: true
+  })
+    .sort('updatedAt')
+    .then((users) => {
+      res.send(users)
+    })
+}
+
 let getPlaying = () => {
   User.find({
     status: true
