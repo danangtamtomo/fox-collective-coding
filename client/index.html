@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta charset="utf-8">
     <title>fox-collective-coding</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://www.gstatic.com/firebasejs/3.7.2/firebase.js"></script>
+    <!-- CodeMirror and its JavaScript mode file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/mode/javascript/javascript.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css" />
+    <!-- Firepad -->
+    <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
+    <script src="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
+
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
@@ -14,15 +25,75 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script>
-      window.fbAsyncInit = function() { FB.init({ appId : '741874725977340', cookie : true,
-      // enable cookies to allow the server to access the session
-      xfbml : true,
-      // parse social plugins on this page
-      version : 'v2.8'
-      // use graph api version 2.8
-      }); }; (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return; js = d.createElement(s); js.id = id; js.src = "//connect.facebook.net/en_US/sdk.js"; fjs.parentNode.insertBefore(js, fjs); }(document, 'script', 'facebook-jssdk'));
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId: '741874725977340',
+          cookie: true,
+          // enable cookies to allow the server to access the session
+          xfbml: true,
+          // parse social plugins on this page
+          version: 'v2.8'
+          // use graph api version 2.8
+        });
+      };
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
     </script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyBGJ5pMIoiOpAP-i59GvyJf7vI7SJM0nQM",
+        authDomain: "fox-collective-coding.firebaseapp.com",
+        databaseURL: "https://fox-collective-coding.firebaseio.com",
+        storageBucket: "fox-collective-coding.appspot.com",
+        messagingSenderId: "739135840140"
+      };
+      firebase.initializeApp(config);
+
+      //listener buat klo ada user online
+      var onlineDir = firebase.database().ref('newonline/');
+      onlineDir.on('value', function(notif) {
+        if (notif.val() !== null) {
+
+          axios.get('http://localhost:3000/api/user/checkonline')
+            .then(function(response) {
+              console.log(response);
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
+        }
+        onlineDir.set(null)
+      });
+
+      //listener buat klo ada user offline
+      var offlineDir = firebase.database().ref('newoffline/');
+      offlineDir.on('value', function(notif) {
+        if (notif.val() !== null) {
+          axios.get('http://localhost:3000/api/user/checkonline')
+            .then(function(response) {
+              console.log(response);
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
+        }
+        offlineDir.set(null)
+      });
+    </script>
+    <!-- <script src="src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+      var editor = ace.edit("editor");
+      editor.setTheme("ace/theme/twilight");
+      editor.session.setMode("ace/mode/javascript");
+    </script> -->
   </body>
+
 </html>

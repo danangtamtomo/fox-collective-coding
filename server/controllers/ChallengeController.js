@@ -5,6 +5,7 @@ const cron = require('node-cron')
 const moment = require('moment')
 const fs = require('fs')
 const challengeManager = require('../helpers/challengeManager')
+const User = require('../models/User')
 // var AnswerIncubator = require('../answerincubator')
 
 let getChallenges = (req, res, next) => {
@@ -85,9 +86,8 @@ let checkAnswer = (req, res, next) => {
 
 let checkOnline = (req, res, next) => {
   User.find({
-    status: true
-  })
-    .sort('updatedAt')
+      status: true
+    })
     .then((users) => {
       res.send(users)
     })
@@ -103,7 +103,7 @@ let getPlaying = () => {
         user.turn_order = index + 1
         user.save()
           .then(() => {
-            cron.schedule(`* ${moment().add(2*(index+1), 'm').format('m')} * * *`, function() {
+            cron.schedule(`* ${moment().add(2 * (index + 1), 'm').format('m')} * * *`, function() {
               challengeManager.notifyTurn()
             })
           })
@@ -115,5 +115,6 @@ module.exports = {
   getChallenges,
   createChallenge,
   updateChallenge,
-  checkAnswer
+  checkAnswer,
+  checkOnline
 }

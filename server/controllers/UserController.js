@@ -84,7 +84,28 @@ let verifyToken = (req, res, next) => {
   })
 }
 
+let logout = (req, res) => {
+  User.findOneAndUpdate({
+    email: req.body.email
+  }, {
+    status: false
+  }, {
+    new: true
+  }).then(function(err, data) {
+    if (err) {
+      throw err
+    }
+    res.send(data)
+  }).catch((e) => {
+    res.send({
+      message: 'ada yang salah waktu menjalankan method findOneOrCreate',
+      error: e
+    })
+  })
+}
+
 module.exports = {
   login,
-  verifyToken
+  verifyToken,
+  logout
 }
