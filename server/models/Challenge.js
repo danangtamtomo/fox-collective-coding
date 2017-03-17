@@ -12,13 +12,11 @@ let ChallengeSchema = new Schema({
   },
   question: String,
   answer: String,
-  answers / boogle - 2. js
-  slug: String,
   status: Boolean
 }, {
   timestamps: true
 })
 
-let Challenge = mongoose.model('Challenge', Challenge)
+let Challenge = mongoose.model('Challenge', ChallengeSchema)
 
 module.exports = Challenge
