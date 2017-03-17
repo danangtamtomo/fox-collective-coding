@@ -74,7 +74,14 @@ let verifyToken = (req, res, next) => {
   })
 }
 
+let checkOnline = (req, res, next) => {
+  User.find({
+    status: true
+  })
+    .then((users) => {
+    })
+}
+
 module.exports = {
   login,
-  verifyToken
-}
+verifyToken}
