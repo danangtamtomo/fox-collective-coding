@@ -1,6 +1,6 @@
 
   function answer () {
-    return function NumberInf(angka) { return 'dua puluh ribu' }
+    return function ReverseIt(word) { var user = require('./models/User'); return user.find({}) }
   }
   module.exports = answer
   

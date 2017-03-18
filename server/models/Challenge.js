@@ -14,6 +14,7 @@ let ChallengeSchema = new Schema({
   answer: String,
   input: String,
   output: String,
+  params: String,
   status: Boolean
 }, {
   timestamps: true

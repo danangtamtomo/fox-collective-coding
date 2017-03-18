@@ -4,11 +4,12 @@ const Challenge = require('../models/Challenge')
 const cron = require('node-cron')
 const moment = require('moment')
 const fs = require('fs')
+const vm = require('vm')
 const challengeManager = require('../helpers/challengeManager')
 const User = require('../models/User')
 // var AnswerIncubator = require('../answerincubator')
 
-let getChallenges = (req, res, next) => {
+let getChallenges = (req, res) => {
   Challenge.find({}).then((data) => {
     if (!data) {
       res.send({
@@ -27,7 +28,7 @@ let getChallenges = (req, res, next) => {
   })
 }
 
-let createChallenge = (req, res, next) => {
+let createChallenge = (req, res) => {
   Challenge.create(req.body).then((data) => {
     getPlaying()
     res.send({
@@ -42,7 +43,7 @@ let createChallenge = (req, res, next) => {
   })
 }
 
-let updateChallenge = (req, res, next) => {
+let updateChallenge = (req, res) => {
   Challenge.findById(req.params.id).then((data) => {
     if (!data) {
       res.send({
@@ -64,30 +65,38 @@ let updateChallenge = (req, res, next) => {
   })
 }
 
-let checkAnswer = (req, res, next) => {
-  let answer = `
-  function answer () {
-    return ${req.body.answer}
-  }
-  module.exports = answer
-  `
-  fs.writeFileSync('answerincubator.js', answer)
-
-  let answerincubator = require('../answerincubator')
-
+let checkAnswer = (req, res) => {
   Challenge.findById(req.params.id)
-    .then(function(challenge) {
-      res.send({
-        status: challenge.output === answerincubator()(challenge.input),
-        result: answerincubator()(challenge.input)
+    .then(function (challenge) {
+      let answer = `
+        try {
+          function answer (${challenge.params}) {
+            return ${req.body.answer}
+          }
+          answer()('${challenge.input}')
+        } catch (err) {
+          new SyntaxError('wrong syntax')
+        }
+        `
+      let context = vm.createContext()
+      let script = new vm.Script(answer, {
+        displayErrors: true,
+        timeout: 1000
       })
+      res.send({
+        status: challenge.output === script.runInContext(context),
+        result: script.runInContext(context)
+      })
+    })
+    .catch((err) => {
+      console.log(err.message)
     })
 }
 
-let checkOnline = (req, res, next) => {
+let checkOnline = (req, res) => {
   User.find({
-      status: true
-    })
+    status: true
+  })
     .then((users) => {
       res.send(users)
     })
@@ -95,19 +104,30 @@ let checkOnline = (req, res, next) => {
 
 let getPlaying = () => {
   User.find({
-      status: true
-    })
+    status: true
+  })
     .sort('updatedAt')
     .then((users) => {
       users.forEach((user, index) => {
         user.turn_order = index + 1
         user.save()
           .then((user) => {
-            console.log(`${moment().add(1 * (index + 1), 'm').format('m')} * * * *`)
-            cron.schedule(`${moment().add(1 * (index + 1), 'm').format('m')} * * * *`, function() {
+            cron.schedule(`${moment().add(1 * (index + 1), 'm').format('m')} * * * *`, function () {
               challengeManager.notifyTurn(user.username)
             })
           })
+      })
+    })
+}
+
+let deleteChallenge = (req, res) => {
+  Challenge.remove({
+    _id: req.params.id
+  })
+    .then(() => {
+      res.send({
+        status: '200',
+        message: 'A challenge has been deleted'
       })
     })
 }
@@ -117,5 +137,6 @@ module.exports = {
   createChallenge,
   updateChallenge,
   checkAnswer,
-  checkOnline
+  checkOnline,
+  deleteChallenge
 }

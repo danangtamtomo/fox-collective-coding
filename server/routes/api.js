@@ -19,6 +19,7 @@ router.get('/challenge', challengeControllers.getChallenges)
 // router.get('/challenge/:id', challengeControllers.getChallenge)
 router.post('/challenge', challengeControllers.createChallenge)
 router.put('/challenge/:id', challengeControllers.updateChallenge)
+router.delete('/challenge/:id', challengeControllers.deleteChallenge)
 router.post('/challenge/checkanswer/:id', challengeControllers.checkAnswer)
 // router.delete('/challenge/:id', challengeControllers.deleteChallenge)
 
